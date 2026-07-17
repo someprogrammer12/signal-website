@@ -104,8 +104,9 @@
     return (db || 0) - (da || 0);
   });
   console.log('[tests]', sortedTests.map(t => ({date: t.Date, total: t.Total, label: t.Label, type: t['Test type']})));
-  const completed = sortedTests.filter(t => t.Total != null || t.Date);
-  const latest = completed[0];
+  function hasScore(t) { return t.Total != null || t.Math != null || t['R&W'] != null; }
+  const withScore = sortedTests.filter(hasScore);
+  const latest = withScore[0] || sortedTests[0];
   const scoreContainer = document.getElementById('score-content');
   const scoreDate = document.getElementById('score-date');
 
