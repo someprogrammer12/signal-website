@@ -63,20 +63,8 @@
   }
 
   const upcoming = assignments
-    .map(a => ({ ...a, _due: parseDate(a['Due date']) }))
-    .filter(a => {
-      const due = a._due;
-      if (!due) return false;
-      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const end = new Date(weekFromNow.getFullYear(), weekFromNow.getMonth(), weekFromNow.getDate());
-      const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
-      const status = (a.Status || '').toLowerCase();
-      const keep = dueDay >= start && dueDay <= end && !['submitted', 'graded'].includes(status);
-      if (!keep) console.log('[assignments skip]', a.Assignment, 'status=', status, 'due=', due.toISOString());
-      return keep;
-    })
-    .sort((a, b) => (a._due || 0) - (b._due || 0));
-  console.log('[assignments] upcoming count=', upcoming.length, 'assignments total=', assignments.length);
+    .sort((a, b) => (parseDate(a['Due date']) || 0) - (parseDate(b['Due date']) || 0))
+    .slice(0, 20);
 
   const assignContainer = document.getElementById('assignments-list');
   const assignRange = document.getElementById('assignment-date-range');
@@ -126,19 +114,23 @@
     scoreDate.textContent = '';
   } else {
     scoreDate.textContent = new Date(latest.Date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const total = latest.Total ?? '—';
+    const math = latest.Math ?? '—';
+    const rw = latest['R&W'] ?? '—';
+    const label = latest['Test type'] || latest.Label || 'Score';
     scoreContainer.innerHTML = `
-      <div class="score-big">${latest.Total ?? '—'}</div>
-      <div class="score-label">${latest['Test type'] || latest.Label || 'Total Score'}</div>
+      <div class="score-big">${total}</div>
+      <div class="score-label">${label}</div>
       <div class="score-modules">
         <div class="score-mod">
           <span class="score-mod-label">Math</span>
-          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${latest.Math ? Math.min(100, (latest.Math/800)*100) : 0}%"></div></div>
-          <span class="score-mod-value">${latest.Math ?? '—'}/800</span>
+          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${typeof math==='number' ? Math.min(100,(math/800)*100) : 0}%"></div></div>
+          <span class="score-mod-value">${math}/800</span>
         </div>
         <div class="score-mod">
           <span class="score-mod-label">Reading & Writing</span>
-          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${latest['R&W'] ? Math.min(100, (latest['R&W']/800)*100) : 0}%"></div></div>
-          <span class="score-mod-value">${latest['R&W'] ?? '—'}/800</span>
+          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${typeof rw==='number' ? Math.min(100,(rw/800)*100) : 0}%"></div></div>
+          <span class="score-mod-value">${rw}/800</span>
         </div>
       </div>
     `;
