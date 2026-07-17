@@ -53,17 +53,30 @@
 
   function parseDate(d) {
     if (!d) return null;
-    return new Date(d);
+    const s = String(d).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+      const parts = s.split('-');
+      return new Date(+parts[0], +parts[1]-1, +parts[2]);
+    }
+    const dt = new Date(s);
+    return Number.isNaN(dt.getTime()) ? null : dt;
   }
 
   const upcoming = assignments
+    .map(a => ({ ...a, _due: parseDate(a['Due date']) }))
     .filter(a => {
-      const due = parseDate(a['Due date']);
+      const due = a._due;
       if (!due) return false;
+      const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const end = new Date(weekFromNow.getFullYear(), weekFromNow.getMonth(), weekFromNow.getDate());
+      const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
       const status = (a.Status || '').toLowerCase();
-      return due >= today && due <= weekFromNow && !['submitted', 'graded'].includes(status);
+      const keep = dueDay >= start && dueDay <= end && !['submitted', 'graded'].includes(status);
+      if (!keep) console.log('[assignments skip]', a.Assignment, 'status=', status, 'due=', due.toISOString());
+      return keep;
     })
-    .sort((a, b) => parseDate(a['Due date']) - parseDate(b['Due date']));
+    .sort((a, b) => (a._due || 0) - (b._due || 0));
+  console.log('[assignments] upcoming count=', upcoming.length, 'assignments total=', assignments.length);
 
   const assignContainer = document.getElementById('assignments-list');
   const assignRange = document.getElementById('assignment-date-range');
@@ -102,7 +115,9 @@
     const db = parseDate(b.Date);
     return (db || 0) - (da || 0);
   });
-  const latest = sortedTests[0];
+  console.log('[tests]', sortedTests.map(t => ({date: t.Date, total: t.Total, label: t.Label, type: t['Test type']})));
+  const completed = sortedTests.filter(t => t.Total != null || t.Date);
+  const latest = completed[0];
   const scoreContainer = document.getElementById('score-content');
   const scoreDate = document.getElementById('score-date');
 
