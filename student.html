@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — Student OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+/* Student dashboard styles */
+.dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.dash-header {
+  margin-bottom: 3rem;
+}
+
+.dash-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.dash-header .greeting {
+  color: var(--charcoal-soft);
+  font-size: 0.95rem;
+}
+
+.dash-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dash-nav .logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.dash-nav-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.user-toggle {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+.user-toggle:hover {
+  background: var(--cream);
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  color: var(--charcoal);
+}
+
+.card-meta {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.assignment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.assignment:last-child {
+  border-bottom: none;
+}
+
+.assignment-main {
+  flex: 1;
+}
+
+.assignment-name {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.assignment-detail {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.assignment-due {
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.assignment-due .due-label {
+  color: var(--charcoal-soft);
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.urgency-high {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.urgency-med {
+  color: var(--amber);
+  font-weight: 500;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--cream);
+  color: var(--charcoal-soft);
+}
+
+.status-submitted {
+  background: var(--sage);
+  color: white;
+}
+
+/* Latest Score */
+.score-big {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.score-label {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+}
+
+.score-modules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.score-section {
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: 10px;
+}
+
+.score-section-label {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.score-modules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.score-mod {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-mod-label {
+  font-size: 0.9rem;
+  color: var(--charcoal-soft);
+}
+
+.score-mod-bar {
+  flex: 1;
+  max-width: 120px;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 0.75rem;
+}
+
+.score-mod-fill {
+  height: 100%;
+  background: var(--terracotta);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.score-mod-value {
+  font-weight: 600;
+  font-size: 0.95rem;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Drill log */
+.drill-day {
+  margin-bottom: 1.25rem;
+}
+
+.drill-day:last-child {
+  margin-bottom: 0;
+}
+
+.drill-date {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--charcoal-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.drill-row {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.drill-row:last-child {
+  border-bottom: none;
+}
+
+.drill-domain {
+  font-weight: 500;
+  min-width: 160px;
+}
+
+.drill-meta {
+  color: var(--charcoal-soft);
+  flex: 1;
+}
+
+.drill-acc {
+  font-weight: 500;
+  min-width: 60px;
+  text-align: right;
+}
+
+.acc-good { color: #2d7d46; }
+.acc-ok { color: var(--amber); }
+.acc-low { color: #b91c1c; }
+
+/* Session */
+.next-session {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.session-date-box {
+  background: var(--charcoal);
+  color: var(--cream);
+  padding: 1.25rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 90px;
+}
+
+.session-month {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  margin-bottom: 0.25rem;
+}
+
+.session-day {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.session-info h3 {
+  margin-bottom: 0.5rem;
+}
+
+.session-info p {
+  color: var(--charcoal-soft);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Mastery */
+.mastery-domain {
+  margin-bottom: 1.5rem;
+}
+
+.mastery-domain:last-child {
+  margin-bottom: 0;
+}
+
+.mastery-domain-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--charcoal-soft);
+  margin-bottom: 0.75rem;
+}
+
+.mastery-skill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.mastery-skill-name {
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.mastery-bar {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.mastery-step {
+  width: 36px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+
+.mastery-step.active-learning { background: #6ea8d7; }
+.mastery-step.active-shaky { background: var(--amber); }
+.mastery-step.active-reflex { background: #2d7d46; }
+
+.mastery-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--charcoal-soft);
+  margin-top: 0.35rem;
+  padding: 0 0 0 0;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--charcoal-soft);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--charcoal-soft);
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 2rem 1.25rem;
+  }
+  .assignment {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .assignment-due {
+    text-align: left;
+  }
+  .next-session {
+    grid-template-columns: 1fr;
+  }
+  .score-modules {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+  <nav class="dash-nav">
+    <a href="/" class="logo">Signal</a>
+    <div class="dash-nav-right">
+      <button class="user-toggle" onclick="switchView()">Parent view</button>
+      <button class="user-toggle" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <!-- Right Now: Assignments -->
+  <div class="card" id="assignments">
+    <div class="card-header">
+      <div class="card-title">What's due this week</div>
+      <div class="card-meta" id="assignment-date-range">Loading...</div>
+    </div>
+    <div id="assignments-list">
+      <div class="loading">Loading assignments...</div>
+    </div>
+  </div>
+
+  <!-- Latest Score -->
+  <div class="card" id="latest-score">
+    <div class="card-header">
+      <div class="card-title">Latest score</div>
+      <div class="card-meta" id="score-date">No tests yet</div>
+    </div>
+    <div id="score-content">
+      <div class="loading">Loading scores...</div>
+    </div>
+  </div>
+
+  <!-- Drill Log -->
+  <div class="card" id="drill-log">
+    <div class="card-header">
+      <div class="card-title">Drill log</div>
+      <div class="card-meta" id="drill-range">Last 7 days</div>
+    </div>
+    <div id="drill-content">
+      <div class="loading">Loading drills...</div>
+    </div>
+  </div>
+
+  <!-- Next Session -->
+  <div class="card" id="next-session">
+    <div class="card-header">
+      <div class="card-title">Next session</div>
+    </div>
+    <div id="session-content">
+      <div class="loading">Loading session...</div>
+    </div>
+  </div>
+
+  <!-- Mastery Progress -->
+  <div class="card" id="mastery">
+    <div class="card-header">
+      <div class="card-title">Mastery progress</div>
+    </div>
+    <div id="mastery-content">
+      <div class="loading">Loading mastery...</div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/student.js"></script>
+</body>
+</html>

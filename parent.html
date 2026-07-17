@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — Parent View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.dashboard {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.dash-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.dash-header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.dash-header .subtitle {
+  color: var(--charcoal-soft);
+  font-size: 0.95rem;
+}
+
+.dash-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dash-nav .logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.user-toggle {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+.user-toggle:hover {
+  background: var(--cream);
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  margin-bottom: 1rem;
+  color: var(--charcoal);
+}
+
+.week-label {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.summary-section {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: var(--charcoal-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.summary-text {
+  color: var(--charcoal);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.summary-hours {
+  display: inline-block;
+  background: var(--cream);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.summary-section.wins .summary-text {
+  color: #2d7d46;
+}
+
+.coming-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.coming-item:last-child {
+  border-bottom: none;
+}
+
+.coming-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.coming-meta {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.coming-due {
+  font-weight: 500;
+  font-size: 0.9rem;
+  min-width: 80px;
+  text-align: right;
+}
+
+.coming-due.soon {
+  color: #b91c1c;
+}
+
+.session-row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.session-row:last-child {
+  border-bottom: none;
+}
+
+.session-date {
+  text-align: center;
+  min-width: 60px;
+}
+
+.session-date .day {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--charcoal);
+}
+
+.session-date .month {
+  font-size: 0.75rem;
+  color: var(--charcoal-soft);
+  text-transform: uppercase;
+}
+
+.session-info {
+  flex: 1;
+}
+
+.session-topic {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.session-duration {
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.score-chart {
+  padding: 1rem 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  height: 150px;
+}
+
+.score-bar {
+  flex: 1;
+  background: var(--terracotta);
+  border-radius: 6px 6px 0 0;
+  min-width: 30px;
+  position: relative;
+  transition: height 0.5s ease;
+  opacity: 0.85;
+}
+
+.score-bar-latest {
+  background: var(--charcoal);
+  opacity: 1;
+}
+
+.score-bar-label {
+  position: absolute;
+  bottom: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--charcoal-soft);
+  white-space: nowrap;
+}
+
+.score-bar-value {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--charcoal-soft);
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--charcoal-soft);
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 2rem 1.25rem;
+  }
+  .score-chart {
+    height: 120px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+  <nav class="dash-nav">
+    <a href="/" class="logo">Signal</a>
+    <div class="dash-nav-right">
+      <button class="user-toggle" onclick="switchView()">Student view</button>
+      <button class="user-toggle" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <div class="dash-header">
+    <h1>This week</h1>
+    <p class="subtitle" id="week-range">Loading...</p>
+  </div>
+
+  <!-- Weekly Summary -->
+  <div class="card" id="summary">
+    <div class="card-title">Weekly summary</div>
+    <div id="summary-content">
+      <div class="loading">Loading summary...</div>
+    </div>
+  </div>
+
+  <!-- Coming Up -->
+  <div class="card" id="coming">
+    <div class="card-title">Coming up</div>
+    <div id="coming-content">
+      <div class="loading">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Recent Sessions -->
+  <div class="card" id="sessions">
+    <div class="card-title">Recent sessions</div>
+    <div id="sessions-content">
+      <div class="loading">Loading sessions...</div>
+    </div>
+  </div>
+
+  <!-- Score Trend -->
+  <div class="card" id="scores">
+    <div class="card-title">Score trend</div>
+    <div id="scores-content">
+      <div class="loading">Loading scores...</div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/parent.js"></script>
+</body>
+</html>

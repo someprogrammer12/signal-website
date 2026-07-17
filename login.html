@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.login-box {
+  background: white;
+  padding: 3.5rem 3rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+.login-box h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.login-box p {
+  color: var(--charcoal-soft);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 0.35rem;
+}
+.tab {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--charcoal-soft);
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.tab.active {
+  background: white;
+  color: var(--charcoal);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+.login-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  display: none;
+}
+.login-error.visible {
+  display: block;
+}
+input[type="password"] {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.2s;
+}
+input[type="password"]:focus {
+  border-color: var(--terracotta);
+}
+input[type="password"]::placeholder {
+  color: #aaa;
+}
+.login-submit {
+  width: 100%;
+  margin-top: 1.25rem;
+}
+</style>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-box">
+    <h1>Signal</h1>
+    <p>Student Operating System</p>
+
+    <div class="tabs">
+      <button class="tab active" data-type="student">Student</button>
+      <button class="tab" data-type="parent">Parent</button>
+    </div>
+
+    <div id="login-error" class="login-error"></div>
+
+    <input
+      type="password"
+      id="passcode"
+      placeholder="Enter passcode"
+      autocomplete="off"
+    >
+
+    <button class="btn-primary login-submit" onclick="submitLogin()">Enter</button>
+  </div>
+</div>
+
+<script>
+let selectedType = 'student';
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    selectedType = tab.dataset.type;
+  });
+});
+
+document.getElementById('passcode').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitLogin();
+});
+
+function submitLogin() {
+  const passcode = document.getElementById('passcode').value.trim();
+  const errorEl = document.getElementById('login-error');
+
+  fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ passcode, type: selectedType })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      window.location.href = data.redirect;
+    } else {
+      errorEl.textContent = data.error;
+      errorEl.classList.add('visible');
+    }
+  })
+  .catch(() => {
+    errorEl.textContent = 'Connection error. Try again.';
+    errorEl.classList.add('visible');
+  });
+}
+</script>
+</body>
+</html>

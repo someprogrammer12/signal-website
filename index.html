@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal — The Student Operating System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="/" class="logo">Signal</a>
+      <div class="nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#what-signal-handles">What Signal handles</a>
+        <a href="#views">Views</a>
+        <a href="#comparison">Value</a>
+        <a href="#tiers">Tiers</a>
+        <a href="#about">About</a>
+        <a href="/login" class="login-nav-cta">Student / Parent login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <!-- Ribbon SVG background motif -->
+    <svg class="ribbon-bg" viewBox="0 0 1440 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M-100,200 Q400,100 800,250 T1600,150 L1600,800 L-100,800 Z" fill="none" stroke="#C4A77D" stroke-width="1.5" opacity="0.25"/>
+      <path d="M-50,250 Q450,180 900,300 T1600,200 L1600,800 L-50,800 Z" fill="none" stroke="#D4A03C" stroke-width="1" opacity="0.15"/>
+      <path d="M0,320 Q500,250 950,380 T1600,280 L1600,800 L0,800 Z" fill="none" stroke="#C4A77D" stroke-width="0.75" opacity="0.1"/>
+    </svg>
+
+    <div class="container">
+      <div class="hero-content">
+        <h1>The Student OS for<br>families navigating<br>the U.S. college system.</h1>
+        <p class="hero-sub">One place for every deadline, score, and session. No more seven portals. No more chasing details. Just a clear signal.</p>
+        <div class="hero-actions">
+          <a href="#how-it-works" class="btn-primary">See how it works</a>
+          <a href="#contact" class="btn-secondary">Book a call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem / Solution -->
+  <section class="problem">
+    <!-- Ribbon divider -->
+    <div class="ribbon-divider">
+      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,40 Q360,70 720,30 T1440,50" fill="none" stroke="#C4A77D" stroke-width="1.5" opacity="0.4"/>
+        <path d="M0,55 Q360,85 720,45 T1440,65" fill="none" stroke="#D4A03C" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <h2>How it works</h2>
+      <p class="section-sub">One system. Less noise for everyone.</p>
+      <div class="problem-grid">
+        <div class="problem-item">
+          <span class="problem-number">1</span>
+          <div>
+            <h3>Student OS dashboard</h3>
+            <p>Assignments, scores, and next steps in one place. The student opens one screen and knows exactly what is due. No switching apps, no searching — just what's next.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="problem-number">2</span>
+          <div>
+            <h3>Resource library</h3>
+            <p>Guides, templates, and practice materials organized by need. When she does not know how to start an essay or prep for a test, the answer is already here.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="problem-number">3</span>
+          <div>
+            <h3>One system, two views</h3>
+            <p>The student sees what's due and how she's doing. The parent gets one calm check-in a week. No seven logins. No hunting for updates.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Signal handles -->
+  <section id="what-signal-handles" class="what-you-handle">
+    <div class="container">
+      <h2>What Signal handles</h2>
+      <p class="section-sub">Every component of a student's application. Signal owns the ones that matter most.</p>
+      <div class="table-wrapper">
+        <table class="components-table">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>What Signal handles</th>
+              <th>The honest version</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GPA</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Track every semester. Catch slips early before they compound.</td>
+            </tr>
+            <tr>
+              <td><strong>SAT / ACT</strong></td>
+              <td><span class="tag-coach">Coaches</span></td>
+              <td>Pick the test. Build the prep schedule. Run the drill protocol.</td>
+            </tr>
+            <tr>
+              <td><strong>Course rigor</strong></td>
+              <td><span class="tag-coach">Coaches</span></td>
+              <td>Plan the honors and AP path so the course load matches the goal.</td>
+            </tr>
+            <tr>
+              <td><strong>Executive function</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Deadline systems, the dashboard, anti-procrastination structure. The thing that fixes the "she's smart but..." gap.</td>
+            </tr>
+            <tr>
+              <td><strong>Parent bandwidth</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Single point of contact. The family stops chasing details because one weekly check-in is enough.</td>
+            </tr>
+            <tr>
+              <td><strong>System translation</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Decode the U.S. system for the family. What's a 504? When does the SAT matter? What does "holistic" mean?</td>
+            </tr>
+            <tr>
+              <td><strong>Essays</strong></td>
+              <td><span class="tag-coach">Coaches</span></td>
+              <td>Brainstorm, structure, feedback. Never write them. The student's voice has to survive the process.</td>
+            </tr>
+            <tr>
+              <td><strong>Applications</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Common App, deadlines, score sends, fee waivers. Mechanics that fall through cracks bleed admits.</td>
+            </tr>
+            <tr>
+              <td><strong>Recommendations</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Who to ask, when, and what to give them. The brag sheet lives here.</td>
+            </tr>
+            <tr>
+              <td><strong>Financial aid</strong></td>
+              <td><span class="tag-coach">Coaches</span></td>
+              <td>FAFSA/CSS deadlines, net-price calculators, scholarship search. Specifics get referred.</td>
+            </tr>
+            <tr>
+              <td><strong>Decision management</strong></td>
+              <td><span class="tag-own">Owns it</span></td>
+              <td>Track results, compare offers, manage the waitlist conversation. The most emotional part. Signal holds it.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="table-note"><span class="tag-refer">Refer</span> = out of scope. Deep test-prep tutoring, recruiting, BS/MD strategy — these get referred to specialists. Saying no plainly is part of the service.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Views -->
+  <section id="views">
+    <div class="container">
+      <div class="views-grid">
+        <div class="view">
+          <div class="view-label">Student view</div>
+          <h3>The student opens one screen</h3>
+          <p>Assignments, scores, and next steps in one place. No switching between apps. No searching. Just what's next.</p>
+        </div>
+        <div class="view">
+          <div class="view-label">Parent view</div>
+          <h3>The parent gets one signal</h3>
+          <p>One check-in a week: what went well, what's coming, and how much time was spent. Nothing to log in to. Nothing to chase down.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section id="comparison" class="comparison">
+    <!-- Ribbon divider -->
+    <div class="ribbon-divider">
+      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,50 Q360,20 720,60 T1440,40" fill="none" stroke="#C4A77D" stroke-width="1.5" opacity="0.3"/>
+        <path d="M0,65 Q360,35 720,75 T1440,55" fill="none" stroke="#D4A03C" stroke-width="1" opacity="0.2"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <h2>What this costs if you hire separately</h2>
+      <p class="section-sub">Signal bundles everything into one flat monthly fee. Here is what the same coverage costs if you piece it together.</p>
+      <div class="comparison-grid">
+        <div class="comparison-col">
+          <h3>SAT prep tutor</h3>
+          <div class="price">$75–$200<span>/hr</span></div>
+          <p class="comparison-note">Typical 20-hour prep package: $1,500–$4,000. Specialist tutors run higher.</p>
+        </div>
+        <div class="comparison-col">
+          <h3>Academic coach</h3>
+          <div class="price">$50–$150<span>/hr</span></div>
+          <p class="comparison-note">Weekly accountability, deadline management, study structure. Usually 2–3 hrs/wk.</p>
+        </div>
+        <div class="comparison-col">
+          <h3>College counselor</h3>
+          <div class="price">$4,000–$13,000</div>
+          <p class="comparison-note">Full-service private package. Hourly a la carte runs $400/hr at the low end.</p>
+        </div>
+      </div>
+      <div class="comparison-total">
+        <div class="comparison-total-label">Total if hired separately</div>
+        <div class="comparison-total-price">$6,000–$20,000+<span style="font-size:1.25rem;font-family:'Inter',sans-serif;opacity:0.7;"> per engagement</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tiers -->
+  <section id="tiers">
+    <div class="container">
+      <h2>Tiers</h2>
+      <p class="section-sub">Fixed scope, flat price. No surprise invoices. Caseload capped at 7 outcome-families — quality over quantity.</p>
+      <div class="tier-grid">
+        <div class="tier">
+          <div class="tier-header">
+            <h3>Light</h3>
+            <p class="tier-grade">Freshman year</p>
+          </div>
+          <div class="tier-price">$1,000<span>/month</span></div>
+          <ul class="tier-features">
+            <li>Student OS dashboard</li>
+            <li>~2 hrs/week accountability sessions</li>
+            <li>Weekly parent signal</li>
+            <li>Async support, 24hr reply</li>
+            <li>Grade tracking + deadline system</li>
+            <li>Resource library</li>
+          </ul>
+          <a href="#contact" class="btn-secondary tier-cta">Inquire</a>
+        </div>
+        <div class="tier tier-featured">
+          <div class="tier-badge">Most popular</div>
+          <div class="tier-header">
+            <h3>Standard</h3>
+            <p class="tier-grade">Sophomore / Junior year</p>
+          </div>
+          <div class="tier-price">$1,600<span>/month</span></div>
+          <ul class="tier-features">
+            <li>Everything in Light</li>
+            <li>~3 hrs/week, including test planning</li>
+            <li>SAT strategy + drill protocol</li>
+            <li>College list research</li>
+            <li>Monthly strategy sync</li>
+            <li>Essay coaching (structure only)</li>
+          </ul>
+          <a href="#contact" class="btn-primary tier-cta">Inquire</a>
+        </div>
+        <div class="tier">
+          <div class="tier-header">
+            <h3>Intensive</h3>
+            <p class="tier-grade">Senior / SAT prep</p>
+          </div>
+          <div class="tier-price">$2,000<span>/month</span></div>
+          <ul class="tier-features">
+            <li>Everything in Standard</li>
+            <li>~4 hrs/week, full application sprint</li>
+            <li>Essay deep work + feedback</li>
+            <li>Application mechanics end-to-end</li>
+            <li>Decision management</li>
+            <li>Bounded async support</li>
+          </ul>
+          <a href="#contact" class="btn-secondary tier-cta">Inquire</a>
+        </div>
+      </div>
+      <p class="tiers-note">Prices are flat. No surprise invoices. Sibling logic: per-student with a 15–20% shared-overhead discount.</p>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-photo">
+          <!-- Replace with real headshot -->
+          <svg class="photo-placeholder" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="400" fill="#E8E0D5"/>
+            <circle cx="150" cy="140" r="60" fill="#C4A77D" opacity="0.25"/>
+            <path d="M 80 240 Q 150 320 220 240" fill="#C4A77D" opacity="0.25"/>
+            <text x="150" y="380" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#888">Your photo here</text>
+          </svg>
+        </div>
+        <div class="about-text">
+          <h2>About Signal</h2>
+          <p class="about-role">Student systems architect</p>
+          <p>Signal builds the operating system between seven portals and one family's peace of mind. The first proof of the system was a sophomore healthcare grade moving from 58 to passing before the retake window closed — not because the student suddenly loved school, but because the structure made it impossible to lose track of what mattered.</p>
+          <p>Purdue '28. Systems thinker. The kind of person who sketches architecture diagrams for her own business on a Saturday night.</p>
+          <p>Signal does not guarantee outcomes. It builds systems that make outcomes more likely — and makes the path there calmer for everyone involved.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="cta">
+    <!-- Ribbon divider -->
+    <div class="ribbon-divider">
+      <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0,30 Q360,60 720,20 T1440,40" fill="none" stroke="#C4A77D" stroke-width="1.5" opacity="0.35"/>
+        <path d="M0,45 Q360,75 720,35 T1440,55" fill="none" stroke="#D4A03C" stroke-width="1" opacity="0.2"/>
+      </svg>
+    </div>
+
+    <div class="container">
+      <h2>Ready to stop managing seven portals?</h2>
+      <p>One conversation, no commitment. Tell Signal about your student, and you'll know within one call which tier is the right fit.</p>
+      <a href="mailto:aishnikkumbh@gmail.com" class="btn-primary cta-btn">Book a call</a>
+      <p class="cta-small">Or text directly. Replies within 24 hours on weekdays.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="logo">Signal</span>
+        <span class="footer-contact">aishnikkumbh@gmail.com · +1 612-964-3411</span>
+        <span class="footer-copy">© 2026 Signal. Built by Aishwarya Nikkumbh.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
