@@ -44,7 +44,7 @@
   // Greeting
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  document.querySelector('.greeting').textContent = `${greeting}, ${studentName.split(' ')[0]}.`;
+  document.getElementById('dash-greeting').textContent = `${greeting}, ${studentName.split(' ')[0]}.`;
 
   // ===== ASSIGNMENTS =====
   const today = new Date();
