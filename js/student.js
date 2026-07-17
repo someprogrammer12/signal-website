@@ -17,11 +17,13 @@
 
   try {
     const res = await fetch(API);
+    if (!res.ok) throw new Error('API error');
     raw = await res.json();
   } catch (e) {
-    document.getElementById('assignments-list').innerHTML =
-      '<div class="empty">Could not load data. Refresh to try again.</div>';
-    return;
+    const el = document.getElementById('assignments-list');
+    if (el) el.innerHTML = '<div class="empty">Could not load data. Refresh to try again.</div>';
+    console.error('student fetch failed', e);
+    raw = { students: [], assignments: [], tests: [], drills: [], sessions: [], mastery: [] };
   }
 
   // ===== PARSE RECORDS =====

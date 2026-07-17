@@ -424,13 +424,17 @@
 <body>
 
 <div class="dashboard">
-  <nav class="dash-nav">
-    <a href="/" class="logo">Signal</a>
-    <div class="dash-nav-right">
-      <button class="user-toggle" onclick="switchView()">Parent view</button>
-      <button class="user-toggle" onclick="logout()">Log out</button>
-    </div>
-  </nav>
+<nav class="dash-nav">
+  <a href="/" class="logo">Signal</a>
+  <div class="dash-nav-right">
+    <button class="user-toggle" onclick="switchView()">Parent view</button>
+    <button class="user-toggle" onclick="logout()">Log out</button>
+  </div>
+</nav>
+
+<div class="dash-header">
+  <h1 id="dash-greeting"></h1>
+</div>
 
   <!-- Right Now: Assignments -->
   <div class="card" id="assignments">
