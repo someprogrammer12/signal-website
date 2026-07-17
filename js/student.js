@@ -111,23 +111,19 @@
     scoreDate.textContent = '';
   } else {
     scoreDate.textContent = new Date(latest.Date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const m1 = latest['Module 1 Math'] ?? latest.Math;
-    const m2 = latest['Module 2 Math'] ?? latest.Math;
-    const r1 = latest['Module 1 R&W'] ?? latest['R&W'];
-    const r2 = latest['Module 2 R&W'] ?? latest['R&W'];
     scoreContainer.innerHTML = `
       <div class="score-big">${latest.Total ?? '—'}</div>
       <div class="score-label">${latest['Test type'] || latest.Label || 'Total Score'}</div>
       <div class="score-modules">
-        <div class="score-section">
-          <div class="score-section-label">Math</div>
-          ${moduleRow('M1', m1, 22)}
-          ${moduleRow('M2', m2, 22)}
+        <div class="score-mod">
+          <span class="score-mod-label">Math</span>
+          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${latest.Math ? Math.min(100, (latest.Math/800)*100) : 0}%"></div></div>
+          <span class="score-mod-value">${latest.Math ?? '—'}/800</span>
         </div>
-        <div class="score-section">
-          <div class="score-section-label">Reading & Writing</div>
-          ${moduleRow('M1', r1, 22)}
-          ${moduleRow('M2', r2, 22)}
+        <div class="score-mod">
+          <span class="score-mod-label">Reading & Writing</span>
+          <div class="score-mod-bar"><div class="score-mod-fill" style="width:${latest['R&W'] ? Math.min(100, (latest['R&W']/800)*100) : 0}%"></div></div>
+          <span class="score-mod-value">${latest['R&W'] ?? '—'}/800</span>
         </div>
       </div>
     `;
