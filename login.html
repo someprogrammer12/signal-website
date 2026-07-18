@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signal — Login</title>
+<title>Signal — Parent login</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <style>
 .login-wrap {
@@ -21,13 +21,13 @@
   padding: 3.5rem 3rem;
   border-radius: 16px;
   border: 1px solid var(--border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-lg);
   max-width: 400px;
   width: 100%;
   text-align: center;
 }
 .login-box h1 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Fraunces', Georgia, serif;
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
@@ -35,32 +35,6 @@
   color: var(--charcoal-soft);
   margin-bottom: 2rem;
   font-size: 0.95rem;
-}
-.tabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  background: var(--cream);
-  border-radius: 8px;
-  padding: 0.35rem;
-}
-.tab {
-  flex: 1;
-  padding: 0.75rem;
-  border: none;
-  background: transparent;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: 6px;
-  color: var(--charcoal-soft);
-  font-family: 'Inter', sans-serif;
-  transition: all 0.2s;
-}
-.tab.active {
-  background: white;
-  color: var(--charcoal);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .login-error {
   background: #fef2f2;
@@ -102,13 +76,8 @@ input[type="password"]::placeholder {
 
 <div class="login-wrap">
   <div class="login-box">
-    <h1>Signal</h1>
-    <p>Student Operating System</p>
-
-    <div class="tabs">
-      <button class="tab active" data-type="student">Student</button>
-      <button class="tab" data-type="parent">Parent</button>
-    </div>
+    <h1>Aish</h1>
+    <p>Parent login</p>
 
     <div id="login-error" class="login-error"></div>
 
@@ -120,19 +89,16 @@ input[type="password"]::placeholder {
     >
 
     <button class="btn-primary login-submit" onclick="submitLogin()">Enter</button>
+
+    <div style="margin-top:1.25rem">
+      <a href="/" style="font-size:0.9rem;color:var(--charcoal-soft);text-decoration:underline">Back to site</a>
+    </div>
   </div>
 </div>
 
 <script>
-let selectedType = 'student';
-
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    selectedType = tab.dataset.type;
-  });
-});
+const FALLBACK_REDIRECT = '/parent';
+const FAMILY_TOKEN = 'I7)13.xZNC`';
 
 document.getElementById('passcode').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitLogin();
@@ -145,12 +111,14 @@ function submitLogin() {
   fetch('/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ passcode, type: selectedType })
+    body: JSON.stringify({ passcode, type: 'parent' })
   })
   .then(r => r.json())
   .then(data => {
     if (data.success) {
-      window.location.href = data.redirect;
+      const redirect = data.redirect || FALLBACK_REDIRECT;
+      const target = redirect + (FAMILY_TOKEN ? '?family=' + encodeURIComponent(FAMILY_TOKEN) : '');
+      window.location.href = target;
     } else {
       errorEl.textContent = data.error;
       errorEl.classList.add('visible');
