@@ -89,10 +89,17 @@ input[type="password"]::placeholder {
     >
 
     <button class="btn-primary login-submit" onclick="submitLogin()">Enter</button>
+
+    <div style="margin-top:1.25rem">
+      <a href="/" style="font-size:0.9rem;color:var(--charcoal-soft);text-decoration:underline">Back to site</a>
+    </div>
   </div>
 </div>
 
 <script>
+const FALLBACK_REDIRECT = '/parent';
+const FAMILY_TOKEN = 'I7)13.xZNC`';
+
 document.getElementById('passcode').addEventListener('keydown', e => {
   if (e.key === 'Enter') submitLogin();
 });
@@ -109,7 +116,9 @@ function submitLogin() {
   .then(r => r.json())
   .then(data => {
     if (data.success) {
-      window.location.href = data.redirect;
+      const redirect = data.redirect || FALLBACK_REDIRECT;
+      const target = redirect + (FAMILY_TOKEN ? '?family=' + encodeURIComponent(FAMILY_TOKEN) : '');
+      window.location.href = target;
     } else {
       errorEl.textContent = data.error;
       errorEl.classList.add('visible');

@@ -68,15 +68,17 @@ def student_page():
 
 @app.route('/parent')
 def parent_page():
+    # Family-token mode: explicit link access
     token = request.args.get('family', '').strip()
     if VALID_FAMILY_TOKENS:
-        if token not in VALID_FAMILY_TOKENS:
+        if token and token in VALID_FAMILY_TOKENS:
+            session['authenticated'] = True
+            session['user_type'] = 'parent'
+            session['family'] = token
+        elif not session.get('authenticated') or session.get('user_type') != 'parent':
             return redirect('/login?next=/parent')
-        session['authenticated'] = True
-        session['user_type'] = 'parent'
-        session['family'] = token
     else:
-        # No family tokens configured yet; fall back to shared passcode via /login.
+        # Passcode-only mode until family tokens are configured
         if not session.get('authenticated') or session.get('user_type') != 'parent':
             return redirect('/login?next=/parent')
     return send_from_directory('.', 'parent.html')
