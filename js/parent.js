@@ -1,4 +1,4 @@
-/* Parent dashboard JS */
+/* Parent dashboard JS — read-only reassurance surface */
 (async function () {
   const authRes = await fetch('/api/check-auth');
   const authData = await authRes.json();
@@ -18,26 +18,26 @@
     const res = await fetch(API);
     raw = await res.json();
   } catch (e) {
-    document.getElementById('summary-content').innerHTML =
-      '<div class="empty">Could not load data. Refresh to try again.</div>';
+    const summaryEl = document.getElementById('summary-content');
+    if (summaryEl) {
+      summaryEl.innerHTML = '<div class="empty">Could not load data. Refresh to try again.</div>';
+    }
     return;
   }
 
-  function records(tableKey) {
-    return (raw[tableKey]?.records || []).map(r => ({ id: r.id, ...r.fields }));
+  if (!raw || !raw.ok) {
+    const summaryEl = document.getElementById('summary-content');
+    if (summaryEl) {
+      summaryEl.innerHTML = '<div class="empty">No data is available right now.</div>';
+    }
+    return;
   }
 
-  const students = records('students');
-  const assignments = records('assignments');
-  const sessions = records('sessions');
-  const tests = records('tests');
-  const summaries = records('summaries');
-
-  const student = students[0] || {};
-  const studentName = student.Name || 'your student';
+  const payload = raw.data || {};
+  const studentName = payload.student || 'your student';
   document.querySelector('.subtitle').textContent = `${studentName}'s week`;
 
-  // Week range
+  // ===== WEEK RANGE TEXT =====
   const today = new Date();
   const weekEnd = new Date(today);
   weekEnd.setDate(today.getDate() + (6 - today.getDay()));
@@ -45,136 +45,118 @@
   document.getElementById('week-range').textContent =
     `${today.toLocaleDateString('en-US', opts)} – ${weekEnd.toLocaleDateString('en-US', opts)}`;
 
+  // ===== FALLBACK HELPERS =====
+  function fallbackSummary() {
+    return '<div class="empty">No summary sent yet. Your next update will appear here.</div>';
+  }
+
+  function fallbackComing() {
+    return '<div class="empty">Nothing coming up in the next two weeks.</div>';
+  }
+
+  function fallbackGrades() {
+    return '<div class="empty">Grades are not available yet. They usually appear after the first report card.</div>';
+  }
+
+  function fallbackInvoices() {
+    return '<div class="empty">No invoices on record yet.</div>';
+  }
+
   // ===== WEEKLY SUMMARY =====
   const summaryContainer = document.getElementById('summary-content');
-  const recentSummary = summaries
-    .filter(s => s.Status === 'Sent')
-    .sort((a, b) => new Date(b['Week Start']) - new Date(a['Week Start']))[0];
+  const note = payload.latestWeeklyNote || {};
 
-  if (!recentSummary) {
-    summaryContainer.innerHTML = '<div class="empty">No summary sent yet. Your next update will appear here.</div>';
+  if (!note || Object.keys(note).length === 0) {
+    summaryContainer.innerHTML = fallbackSummary();
   } else {
-    const ws = new Date(recentSummary['Week Start']);
-    const we = new Date(recentSummary['Week End']);
-    const rangeText = ws.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' – ' + we.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    summaryContainer.innerHTML = `
-      <div class="week-label">${rangeText}</div>
-      ${recentSummary.Wins ? `
+    const ws = note['Week Start'];
+    const we = note['Week End'];
+    const rangeText = (!ws || !we) ? 'This week' :
+      `${new Date(ws).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${new Date(we).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+    const html = [
+      `<div class="week-label">${rangeText}</div>`,
+      note.Wins ? `
         <div class="summary-section wins">
           <div class="summary-label">Wins</div>
-          <div class="summary-text">${recentSummary.Wins}</div>
+          <div class="summary-text">${note.Wins}</div>
         </div>
-      ` : ''}
-      ${recentSummary.Concerns ? `
+      ` : '',
+      note.Concerns ? `
         <div class="summary-section">
           <div class="summary-label">Heads up</div>
-          <div class="summary-text">${recentSummary.Concerns}</div>
+          <div class="summary-text">${note.Concerns}</div>
         </div>
-      ` : ''}
-      ${recentSummary['Action Items Next Week'] ? `
+      ` : '',
+      note['Action Items Next Week'] ? `
         <div class="summary-section">
           <div class="summary-label">Coming up</div>
-          <div class="summary-text">${recentSummary['Action Items Next Week']}</div>
+          <div class="summary-text">${note['Action Items Next Week']}</div>
         </div>
-      ` : ''}
-      ${recentSummary['Hours This Week'] ? `
-        <div class="summary-hours">${recentSummary['Hours This Week']} hours this week</div>
-      ` : ''}
-    `;
+      ` : '',
+      note['Hours This Week'] ? `
+        <div class="summary-hours">${note['Hours This Week']} hours this week</div>
+      ` : '',
+    ].join('');
+
+    summaryContainer.innerHTML = html || '<div class="empty">This week was quiet.</div>';
   }
 
   // ===== COMING UP =====
-  const twoWeeks = new Date(today);
-  twoWeeks.setDate(today.getDate() + 14);
-  const upcoming = assignments
-    .filter(a => {
-      const due = a['Due date'] ? new Date(a['Due date']) : null;
-      if (!due) return false;
-      const status = (a.Status || '').toLowerCase();
-      return due >= today && due <= twoWeeks && !['submitted', 'graded'].includes(status);
-    })
-    .sort((a, b) => new Date(a['Due date']) - new Date(b['Due date']));
-
   const comingContainer = document.getElementById('coming-content');
-  if (upcoming.length === 0) {
-    comingContainer.innerHTML = '<div class="empty">Nothing coming up in the next two weeks.</div>';
+  const nextKeyDates = Array.isArray(payload.nextKeyDates) ? payload.nextKeyDates : [];
+
+  if (nextKeyDates.length === 0) {
+    comingContainer.innerHTML = fallbackComing();
   } else {
-    comingContainer.innerHTML = upcoming.map(a => {
-      const due = new Date(a['Due date']);
-      const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-      const soonClass = diffDays <= 3 ? 'soon' : '';
+    comingContainer.innerHTML = nextKeyDates.map(item => {
+      const dueText = item.date ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Date TBD';
       return `
         <div class="coming-item">
-          <span class="coming-name">${a.Assignment || 'Untitled'}</span>
-          <span class="coming-meta">${a.Status || ''}</span>
-          <span class="coming-due ${soonClass}">${due.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+          <span class="coming-name">${item.label || 'Upcoming item'}</span>
+          <span class="coming-due">${dueText}</span>
         </div>
       `;
     }).join('');
   }
 
-  // ===== RECENT SESSIONS =====
-  const recentSessions = [...sessions]
-    .filter(s => !s.Archived)
-    .sort((a, b) => new Date(b.Date) - new Date(a.Date))
-    .slice(0, 4);
+  // ===== CURRENT GRADES =====
+  const gradesContainer = document.getElementById('grades-content');
+  const currentGrades = Array.isArray(payload.currentGrades) ? payload.currentGrades : [];
 
-  const sessionsContainer = document.getElementById('sessions-content');
-  if (recentSessions.length === 0) {
-    sessionsContainer.innerHTML = '<div class="empty">No sessions yet.</div>';
+  if (currentGrades.length === 0) {
+    gradesContainer.innerHTML = fallbackGrades();
   } else {
-    sessionsContainer.innerHTML = recentSessions.map(s => {
-      const d = new Date(s.Date);
+    gradesContainer.innerHTML = currentGrades.map(g => {
+      const overall = g.overall != null ? g.overall : 'Not yet posted';
+      const byClass = g.by_class || '';
       return `
-        <div class="session-row">
-          <div class="session-date">
-            <div class="day">${d.getDate()}</div>
-            <div class="month">${d.toLocaleDateString('en-US', { month: 'short' })}</div>
-          </div>
-          <div class="session-info">
-            <div class="session-topic">${s.Session || 'Session'}</div>
-            <div class="session-duration">${s['Duration (hrs)'] || ''} hours${s.Type ? ' · ' + s.Type : ''}</div>
-            <div style="color:var(--charcoal-soft); font-size:0.9rem; margin-top:0.25rem;">${s['Focus / topics'] || ''}</div>
-          </div>
+        <div class="summary-section">
+          <div class="summary-label">Overall</div>
+          <div class="summary-text">${overall}</div>
+          ${byClass ? `<div class="summary-text" style="margin-top:0.5rem">${byClass}</div>` : ''}
         </div>
       `;
     }).join('');
   }
 
-  // ===== SCORE TREND =====
-  const sortedTests = [...tests].sort((a, b) => new Date(a.Date) - new Date(b.Date));
-  const scoresContainer = document.getElementById('scores-content');
+  // ===== RECENT INVOICES =====
+  const invoicesContainer = document.getElementById('invoices-content');
+  const invoicesPaid = Array.isArray(payload.invoicesPaid) ? payload.invoicesPaid : [];
 
-  if (sortedTests.length === 0) {
-    scoresContainer.innerHTML = '<div class="empty">No tests yet.</div>';
+  if (invoicesPaid.length === 0) {
+    invoicesContainer.innerHTML = fallbackInvoices();
   } else {
-    const maxScore = 1600;
-    const chartHeight = 120;
-    const barsHTML = sortedTests.map(t => {
-      const total = t.Total || 0;
-      const height = Math.round((total / maxScore) * chartHeight);
-      const d = new Date(t.Date);
-      const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const isLatest = t === sortedTests[sortedTests.length - 1];
-      return `
-        <div class="score-bar ${isLatest ? 'score-bar-latest' : ''}" style="height:${height}px">
-          <span class="score-bar-value">${total}</span>
-          <span class="score-bar-label">${label}</span>
-        </div>
-      `;
-    }).join('');
-
-    scoresContainer.innerHTML = `
-      <div style="height:${chartHeight + 40}px; position:relative; padding-bottom:30px;">
-        <div class="score-chart" style="height:${chartHeight}px;">${barsHTML}</div>
+    invoicesContainer.innerHTML = invoicesPaid.map(inv => `
+      <div class="coming-item">
+        <span class="coming-name">${inv.session || 'Session'}</span>
+        <span class="coming-meta">${inv.status || ''}</span>
+        <span class="coming-due">${inv.date ? new Date(inv.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</span>
       </div>
-    `;
+    `).join('');
   }
 
-  // ===== VIEW SWITCH =====
-  window.switchView = function () {
-    window.location.href = '/student';
-  };
+  // ===== ACTIONS =====
   window.logout = function () {
     fetch('/api/logout', { method: 'POST' }).then(() => {
       window.location.href = '/login';

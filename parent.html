@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signal — Parent View</title>
+<title>Signal — Parent view</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -271,9 +271,8 @@
 
 <div class="dashboard">
   <nav class="dash-nav">
-    <a href="/" class="logo">Signal</a>
+    <a href="/" class="logo">Aish</a>
     <div class="dash-nav-right">
-      <button class="user-toggle" onclick="switchView()">Student view</button>
       <button class="user-toggle" onclick="logout()">Log out</button>
     </div>
   </nav>
@@ -299,19 +298,19 @@
     </div>
   </div>
 
-  <!-- Recent Sessions -->
-  <div class="card" id="sessions">
-    <div class="card-title">Recent sessions</div>
-    <div id="sessions-content">
-      <div class="loading">Loading sessions...</div>
+  <!-- Current Grades -->
+  <div class="card" id="grades">
+    <div class="card-title">Current grades</div>
+    <div id="grades-content">
+      <div class="loading">Loading grades...</div>
     </div>
   </div>
 
-  <!-- Score Trend -->
-  <div class="card" id="scores">
-    <div class="card-title">Score trend</div>
-    <div id="scores-content">
-      <div class="loading">Loading scores...</div>
+  <!-- Invoices -->
+  <div class="card" id="invoices">
+    <div class="card-title">Recent invoices</div>
+    <div id="invoices-content">
+      <div class="loading">Loading invoices...</div>
     </div>
   </div>
 </div>
